@@ -6,7 +6,7 @@ pipeline {
         jdk 'Java17'
         maven 'Maven3'
     }
-  
+
     stages {
         stage("Cleanup Workspace") {
             steps {
@@ -31,20 +31,18 @@ pipeline {
         stage("SonarQube Analysis") {
             steps {
                 script {
-                    withSonarQubeEnv( credentialsId: 'jenkins-sonarqube-token') {
+                    withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') {
                         sh "mvn sonar:sonar"
                     }
                 }
             }
         }
-        stage("Quality Gate"){
+        stage("Quality Gate") {
            steps {
                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
-                }	
-            }
-
+                    waitForQualityGate(abortPipeline: false, credentialsId: 'jenkins-sonarqube-token')
+               }   
+           }
         }
-
     }
 }
